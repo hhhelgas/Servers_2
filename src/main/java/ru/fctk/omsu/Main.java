@@ -87,7 +87,7 @@ public class Main {
             }
         });
 
-        //TODO: можно ли то что в лямбде вынести в класс потонка PongThread?
+        //TODO: можно ли то что в лямбде вынести в класс потонка PongThread
 
         Thread pongThread = new Thread(() -> {
             while (true) {

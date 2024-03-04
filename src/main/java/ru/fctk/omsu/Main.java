@@ -66,12 +66,45 @@ public class Main {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        System.out.println("____________________");
+        //“Ping Pong”, задача заключается в том, чтобы бесконечно выводить на консоль
+        //сообщения “ping” или “pong” из двух разных потоков. При этом сообщения обязаны
+        //чередоваться, т.е. не может быть ситуации, когда ping или pong появляется в
+        //консоли более одного раза подряд.
+        Object lock = new Object();
 
+        Thread pingThread = new Thread(() -> {
+            while (true) {
+                synchronized (lock) {
+                    System.out.println("ping");
+                    lock.notify();
+                    try {
+                        lock.wait();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+
+        //TODO: можно ли то что в лямбде вынести в класс потонка PongThread?
+
+        Thread pongThread = new Thread(() -> {
+            while (true) {
+                synchronized (lock) {
+                    System.out.println("pong");
+                    lock.notify();
+                    try {
+                        lock.wait();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+
+        pingThread.start();
+        pongThread.start();
 
     }
-    //“Ping Pong”, задача заключается в том, чтобы бесконечно выводить на консоль
-    //сообщения “ping” или “pong” из двух разных потоков. При этом сообщения обязаны
-    //чередоваться, т.е. не может быть ситуации, когда ping или pong появляется в
-    //консоли более одного раза подряд.
-
 }
